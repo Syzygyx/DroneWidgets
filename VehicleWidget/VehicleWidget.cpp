@@ -1,4 +1,4 @@
-#include <QDebug>
+//#include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
 
@@ -57,7 +57,7 @@ void VehicleWidget::paintEvent(QPaintEvent* pPE)
 
 void VehicleWidget::mousePressEvent(QMouseEvent* pME)
 {
-	qDebug() << "Mouse pressed at" << pME->pos();
+	//qDebug() << "Mouse pressed at" << pME->pos();
 }
 
 //-----------------------------------------------------------------------------
