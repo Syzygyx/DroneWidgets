@@ -1,0 +1,4 @@
+#ifndef WEIGHTGAUGE_H
+#define WEIGHTGAUGE_H
+
+#endif // WEIGHTGAUGE_H
