@@ -27,7 +27,7 @@
 ****************************************************************************/
 
 
-
+//#include <QDebug>
 #include "qcgaugewidget.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -521,7 +521,11 @@ void QcColorBand::draw(QPainter *painter)
     pen.setCapStyle(Qt::FlatCap);
     pen.setWidthF(r/20.0);
     painter->setBrush(Qt::NoBrush);
-    float offset = getDegFromValue(mBandStartValue);
+	 /*
+	  * this is a bug, because mBandStartValue is never initialized!
+	 float offset = getDegFromValue(mBandStartValue);
+	 */
+	 float offset = mMinDegree;
     for(int i = 0;i<mBandColors.size();i++){
         QColor clr = mBandColors[i].first;
         float sweep;
@@ -529,7 +533,8 @@ void QcColorBand::draw(QPainter *painter)
             sweep = getDegFromValue(mBandColors[i].second)-getDegFromValue(mMinValue);
         else
             sweep = getDegFromValue(mBandColors[i].second)-getDegFromValue(mBandColors[i-1].second);
-        QPainterPath path = createSubBand(-offset,sweep);
+		  //qDebug() << "ColorBand" << i << mBandColors.count() << offset << sweep;
+		  QPainterPath path = createSubBand(-offset,sweep);
         offset += sweep;
         pen.setColor(clr);
         painter->setPen(pen);
