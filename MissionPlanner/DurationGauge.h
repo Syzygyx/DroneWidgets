@@ -1,0 +1,4 @@
+#ifndef DURATIONGAUGE_H
+#define DURATIONGAUGE_H
+
+#endif // DURATIONGAUGE_H
