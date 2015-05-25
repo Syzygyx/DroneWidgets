@@ -24,7 +24,7 @@ public:
 
 signals:
 	//! Emitted when value has changed
-	void SignalValueChanged();
+	void SignalValueChanged(double dVal);
 
 private:
 	//! Builds the widget GUI
@@ -33,6 +33,8 @@ private:
 private slots:
 	//! Updates the label value
 	void UpdateLabel();
+	//! This slot will trigger the signal with a real value
+	void ReportValue();
 
 private:
 	//! Pointer to the scroll bar

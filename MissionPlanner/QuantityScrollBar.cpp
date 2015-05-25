@@ -14,7 +14,7 @@ QuantityScrollBar::QuantityScrollBar(double dDiv, QWidget* pParent) : QWidget(pP
 	// make sure that value in the label is updated when user moves the scrollbar
 	connect(m_psb, SIGNAL(valueChanged(int)), this, SLOT(UpdateLabel()));
 	// make sure other interested widgets know about the change too
-	connect(m_psb, SIGNAL(valueChanged(int)), this, SIGNAL(SignalValueChanged()));
+	connect(m_psb, SIGNAL(valueChanged(int)), this, SLOT(ReportValue()));
 	SetRange(0.0, 10.0);
 
 	UpdateLabel();
@@ -67,6 +67,13 @@ void QuantityScrollBar::UpdateLabel()
 	// take the value from scroll bar, convert it to QString and set it as
 	// label's text
 	m_plbValue->setText(QString::number(m_psb->value()*m_dDiv, 'f', 2));
+}
+
+//-----------------------------------------------------------------------------
+
+void QuantityScrollBar::ReportValue()
+{
+	emit SignalValueChanged(GetValue());
 }
 
 //-----------------------------------------------------------------------------

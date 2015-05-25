@@ -27,20 +27,28 @@ public slots:
 	//! Calculates the missing data
 	void Calculate();
 
+signals:
+	//! Emitted when fuel quantity changes
+	void SignalFuel(double dVal);
+	//! Emitted when weight is recalculated
+	void SignalWeight(double dVal);
+	//! Emitted when flight duration is recalculated
+	void SignalDuration(double dVal);
+
 private:
 	//! Build the entire GUI
 	void BuildGUI();
 
-	/** Creates one line of data with text label, main widget (maybe editable)
+	/** Creates one row of data with text label, main widget (maybe editable)
 	 *  and unit displaying label and insert it into the main layout
 	 */
-	void CreateLine(QString qsText, QWidget* pW, QString qsUnit = "");
+	void CreateRow(QString qsText, QWidget* pW, QString qsUnit = "");
 
 private:
 	//! Pointer to the main widget layout
 	QGridLayout* m_pLayout;
-	//! Line counter
-	int m_iLine;
+	//! Row counter
+	int m_iRow;
 	//! Pointer to the vehicle weight editing widget
 	QSpinBox* m_psbWeight;
 	//! Fuel per gallon weight label

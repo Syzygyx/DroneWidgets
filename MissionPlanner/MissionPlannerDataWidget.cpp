@@ -12,18 +12,21 @@
 MissionPlannerDataWidget::MissionPlannerDataWidget(QWidget* pParent) :
 	QWidget(pParent)
 {
-	m_iLine = 0;
+	m_iRow = 0;
 	setAutoFillBackground(true);
 	BuildGUI();
 
 	// connect the signals, so that values will be recalculated at every change
 	connect(m_psbWeight, SIGNAL(valueChanged(int)), this, SLOT(Calculate()));
-	connect(m_pqsbFuel, SIGNAL(SignalValueChanged()), this, SLOT(Calculate()));
+	connect(m_pqsbFuel, SIGNAL(SignalValueChanged(double)), this, SLOT(Calculate()));
 	connect(m_psbFuelEfficiency, SIGNAL(valueChanged(int)), this, SLOT(Calculate()));
 	connect(m_psbHPW, SIGNAL(valueChanged(int)), this, SLOT(Calculate()));
 
 	for (int i = 0; i < PAYLOAD_COUNT; i++)
-		connect(m_pqsbPayload[i], SIGNAL(SignalValueChanged()), this, SLOT(Calculate()));
+		connect(m_pqsbPayload[i], SIGNAL(SignalValueChanged(double)), this, SLOT(Calculate()));
+
+	// make sure the external objects know about fuel change
+	connect(m_pqsbFuel, SIGNAL(SignalValueChanged(double)), this, SIGNAL(SignalFuel(double)));
 
 	// make initial calculation
 	Calculate();
@@ -77,6 +80,12 @@ void MissionPlannerDataWidget::Calculate()
 	QString qsTime = QString::number(dHours, 'f', 0) + ":";
 	qsTime += QString::number(dMinutes, 'f', 0).rightJustified(2, '0');
 	m_plbHoverTime->setText(qsTime);
+
+	// weight can change in many different ways, so it's easier to send signal
+	// from here, even though many times the weight might not change at all
+	emit SignalWeight(dTotalWeight);
+	// signal the new flight duration in minutes (for now it's 50% of hover time)
+	emit SignalDuration(60.0*dHoverTime/2.0);
 }
 
 //-----------------------------------------------------------------------------
@@ -92,33 +101,33 @@ void MissionPlannerDataWidget::BuildGUI()
 	m_psbWeight->setSingleStep(1);
 	m_psbWeight->setValue(50);				// set some default value
 
-	CreateLine(tr("Vehicle Base Weight"), m_psbWeight, "kg");
+	CreateRow(tr("Vehicle Base Weight"), m_psbWeight, "kg");
 
 	// Fuel type label
 	QLabel* plbFuel = new QLabel(tr("Gasoline"));
 	plbFuel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 	plbFuel->setStyleSheet("color: rgb(0, 255, 0);");
-	CreateLine(tr("Fuel type"), plbFuel);
+	CreateRow(tr("Fuel type"), plbFuel);
 
 	// Fuel quantity field
 	m_pqsbFuel = new QuantityScrollBar(0.25);
 	m_pqsbFuel->SetRange(0.0, 15.0);
-	CreateLine(tr("Fuel Quantity"), m_pqsbFuel, "gallons");
+	CreateRow(tr("Fuel Quantity"), m_pqsbFuel, "gallons");
 
 	// Weight of fuel/gallon field
 	m_plbFWPG = new QLabel("6.8");
 	m_plbFWPG->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	CreateLine(tr("Weight of fuel"), m_plbFWPG, "kg/gallon");
+	CreateRow(tr("Weight of fuel"), m_plbFWPG, "kg/gallon");
 
 	// Fuel weight field
 	m_plbTotalFuelW = new QLabel("");
 	m_plbTotalFuelW->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	CreateLine(tr("Fuel Weight"), m_plbTotalFuelW, "kg");
+	CreateRow(tr("Fuel Weight"), m_plbTotalFuelW, "kg");
 
 	// Fuel density field
 	m_plbFuelDensity = new QLabel("36,763");
 	m_plbFuelDensity->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	CreateLine(tr("Fuel density"), m_plbFuelDensity, "Wh/gallon");
+	CreateRow(tr("Fuel density"), m_plbFuelDensity, "Wh/gallon");
 
 	// Fuel efficiency field
 	m_psbFuelEfficiency = new QSpinBox;
@@ -126,63 +135,63 @@ void MissionPlannerDataWidget::BuildGUI()
 	m_psbFuelEfficiency->setSingleStep(1);
 	m_psbFuelEfficiency->setSuffix("%");
 	m_psbFuelEfficiency->setValue(25);			// set some default value
-	CreateLine(tr("Fuel efficiency"), m_psbFuelEfficiency);
+	CreateRow(tr("Fuel efficiency"), m_psbFuelEfficiency);
 
 	// Fuel Wh field
 	m_plbFuelWh = new QLabel("");
 	m_plbFuelWh->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	CreateLine(tr("Fuel Wh"), m_plbFuelWh, "Wh");
+	CreateRow(tr("Fuel Wh"), m_plbFuelWh, "Wh");
 
 	// Payload fields
 	for (int i = 0; i < PAYLOAD_COUNT; i++) {
 		m_pqsbPayload[i] = new QuantityScrollBar(0.5);
 		m_pqsbPayload[i]->SetRange(0.0, 10.0);
-		CreateLine(tr("Payload %1 Weight").arg(i + 1), m_pqsbPayload[i], "kg");
+		CreateRow(tr("Payload %1 Weight").arg(i + 1), m_pqsbPayload[i], "kg");
 	}
 
 	// Total weight field
 	m_plbTotalWeight = new QLabel("");
 	m_plbTotalWeight->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 	m_plbTotalWeight->setStyleSheet("QLabel { color: red; }");
-	CreateLine(tr("Total Vehicle Weight"), m_plbTotalWeight, "kg");
+	CreateRow(tr("Total Vehicle Weight"), m_plbTotalWeight, "kg");
 
 	// Hover power/weight field
 	m_psbHPW = new QSpinBox;
 	m_psbHPW->setRange(1, 1000);
 	m_psbHPW->setSingleStep(1);
 	m_psbHPW->setValue(222);			// set some default value
-	CreateLine(tr("Hover power/weight"), m_psbHPW, "W/kg");
+	CreateRow(tr("Hover power/weight"), m_psbHPW, "W/kg");
 
 	// Hover power field
 	m_plbHoverPower = new QLabel("");
-	CreateLine(tr("Hover power"), m_plbHoverPower, "W");
+	CreateRow(tr("Hover power"), m_plbHoverPower, "W");
 
 	// Hover duration field
 	m_plbHoverTime = new QLabel("");
 	m_plbHoverTime->setStyleSheet("color: red");
-	CreateLine(tr("Hover duration"), m_plbHoverTime, "h");
+	CreateRow(tr("Hover duration"), m_plbHoverTime, "h");
 
 }
 
 //-----------------------------------------------------------------------------
 
-void MissionPlannerDataWidget::CreateLine(QString qsText, QWidget *pW, QString qsUnit)
+void MissionPlannerDataWidget::CreateRow(QString qsText, QWidget *pW, QString qsUnit)
 {
 	// create text label widget and insert it into layout
 	QLabel* plb = new QLabel(qsText);
 	plb->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	m_pLayout->addWidget(plb, m_iLine, 0);
+	m_pLayout->addWidget(plb, m_iRow, 0);
 	// insert the main line widget into layout
-	m_pLayout->addWidget(pW, m_iLine, 1, 1, 1, Qt::AlignRight | Qt::AlignVCenter);
+	m_pLayout->addWidget(pW, m_iRow, 1, 1, 1, Qt::AlignRight | Qt::AlignVCenter);
 	// if unit given, create the unit label and insert it into layout
 	if (qsUnit.length() > 0) {
 		plb = new QLabel(qsUnit);
 		plb->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-		m_pLayout->addWidget(plb, m_iLine, 2);
+		m_pLayout->addWidget(plb, m_iRow, 2);
 	}
 
 	// increase the line counter
-	m_iLine++;
+	m_iRow++;
 }
 
 //-----------------------------------------------------------------------------
