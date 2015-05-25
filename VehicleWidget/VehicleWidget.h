@@ -1,0 +1,4 @@
+#ifndef VEHICLEWIDGET_H
+#define VEHICLEWIDGET_H
+
+#endif // VEHICLEWIDGET_H
