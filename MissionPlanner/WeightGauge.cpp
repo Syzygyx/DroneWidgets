@@ -37,6 +37,7 @@ WeightGauge::WeightGauge(double dMaxWeight, bool bLabels, QWidget *pParent) :
 	pair.second = 100;
 	li1 << pair;
 	pcb->setColors(li1);
+	pcb->setDgereeRange(-45.0f, 225.0f);
 
 	// second color band
 	pcb = addColorBand(75);
@@ -48,22 +49,23 @@ WeightGauge::WeightGauge(double dMaxWeight, bool bLabels, QWidget *pParent) :
 	pair.second = 100;
 	li2 << pair;
 	pcb->setColors(li2);
+	pcb->setDgereeRange(-45.0f, 225.0f);
 
 	// scales
 	QcDegreesItem* pdi;
 	pdi = addDegrees(84);
 	pdi->setValueRange(0.0, m_dMaxWeight);
 	pdi->setSubDegree(true);
-	pdi->setStep(m_dMaxWeight/8);
+	pdi->setStep(m_dMaxWeight/4);
 
 	// labels
 	if (bLabels == true) {
 		QString qsText;
-		for (int i = 0; i <= 8; i++) {
-			qsText.setNum(i*m_dMaxWeight/8.0, 'f', 0);
+		for (int i = 0; i <= 4; i++) {
+			qsText.setNum(i*m_dMaxWeight/4.0, 'f', 0);
 			// move longer numbers more away from color band
 			QcLabelItem* plbi = addLabel(60 - qsText.length());
-			plbi->setAngle(-45 + 270*i/8.0);
+			plbi->setAngle(-45 + 270*i/4.0);
 			plbi->setText(qsText);
 		}
 	}
@@ -78,6 +80,11 @@ WeightGauge::WeightGauge(double dMaxWeight, bool bLabels, QWidget *pParent) :
 	QcLabelItem* plbi = addLabel(30);
 	plbi->setAngle(-90);
 	plbi->setText("WEIGHT");
+
+	// unit label
+	plbi = addLabel(50);
+	plbi->setAngle(-90);
+	plbi->setText("kg");
 
 	// needle
 	m_pNeedle = addNeedle(80);

@@ -45,14 +45,14 @@ void MissionPlannerGauges::BuildGUI()
 	QGridLayout* pLayout = new QGridLayout(this);
 
 	// fuel gauge
-	m_pFuelGauge = new FuelGauge(15.0);
+	m_pFuelGauge = new FuelGauge(6.0);
 	pLayout->addWidget(m_pFuelGauge, 0, 0);
 
 	QLabel* plb = new QLabel(tr("Fuel gauge"));
 	pLayout->addWidget(plb, 1, 0);
 
 	// weight gauge
-	m_pWeightGauge = new WeightGauge(1600.0);
+	m_pWeightGauge = new WeightGauge(200.0);
 	pLayout->addWidget(m_pWeightGauge, 0, 1);
 
 	plb = new QLabel(tr("Weight gauge"));

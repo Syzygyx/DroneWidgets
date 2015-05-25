@@ -97,7 +97,7 @@ void MissionPlannerDataWidget::BuildGUI()
 
 	// create the vehicle weight edit widget
 	m_psbWeight = new QSpinBox;
-	m_psbWeight->setRange(0, 120);
+	m_psbWeight->setRange(0, 100);
 	m_psbWeight->setSingleStep(1);
 	m_psbWeight->setValue(50);				// set some default value
 
@@ -111,7 +111,7 @@ void MissionPlannerDataWidget::BuildGUI()
 
 	// Fuel quantity field
 	m_pqsbFuel = new QuantityScrollBar(0.25);
-	m_pqsbFuel->SetRange(0.0, 15.0);
+	m_pqsbFuel->SetRange(0.0, 6.0);
 	CreateRow(tr("Fuel Quantity"), m_pqsbFuel, "gallons");
 
 	// Weight of fuel/gallon field
