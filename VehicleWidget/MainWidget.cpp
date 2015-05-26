@@ -14,6 +14,7 @@ MainWidget::MainWidget(QWidget *parent)
 
 	m_pVehicle = new VehicleWidget(this);
 	m_pVehicle->setGeometry(10, 10, 800, 600);
+	m_pVehicle->setStyleSheet("background-color: rgb(64, 64, 64);");
 
 	m_pSlider = new QSlider*[SLIDER_COUNT];
 	for (int i = 0; i < SLIDER_COUNT; i++) {
