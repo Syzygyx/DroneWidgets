@@ -10,7 +10,7 @@
 MainWidget::MainWidget(QWidget *parent)
 	: QWidget(parent)
 {
-	setFixedSize(1000, 900);
+	setFixedSize(1280, 800);
 
 	m_pVehicle = new VehicleWidget(this);
 	m_pVehicle->setGeometry(10, 10, 800, 600);
@@ -19,7 +19,7 @@ MainWidget::MainWidget(QWidget *parent)
 	m_pSlider = new QSlider*[SLIDER_COUNT];
 	for (int i = 0; i < SLIDER_COUNT; i++) {
 		m_pSlider[i] = new QSlider(Qt::Horizontal, this);
-		m_pSlider[i]->setGeometry(10, 630+40*i, 800, 40);
+		m_pSlider[i]->setGeometry(820, 130+40*i, 400, 40);
 		m_pSlider[i]->setRange(0, 400);
 	}
 
@@ -37,8 +37,6 @@ MainWidget::MainWidget(QWidget *parent)
 MainWidget::~MainWidget()
 {
 	delete [] m_pSlider;
-	for (int i = 0; i < SLIDER_COUNT; i++)
-		delete m_pSlider[i];
 }
 
 //-----------------------------------------------------------------------------
