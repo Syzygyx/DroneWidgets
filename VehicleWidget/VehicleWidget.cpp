@@ -42,7 +42,7 @@ void VehicleWidget::paintEvent(QPaintEvent* pPE)
 
 	//P.fillRect(rect(), palette().color(QPalette::Window));
 
-	P.fillRect(rect(), Qt::red);
+	P.fillRect(rect(), Qt::darkGray);
 	QRectF rectW = rect();
 
 	// this should be removed once the correct SVG is in place

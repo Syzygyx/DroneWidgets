@@ -15,13 +15,13 @@ public:
 	~MainWidget();
 
 	//! Adds a temperature gauge to vehicle widget
-	void AddTemperatureGauge(int iX, int iY, int iR);
+	void AddTemperatureGauge(int iS, int iX, int iY, int iR);
 
 private:
 	//! Pointer to vehicle widget
 	VehicleWidget* m_pVehicle;
 	//! Pointer to the slider object
-	QSlider* m_pSlider;
+	QSlider** m_pSlider;
 };
 
 #endif // MAINWIDGET_H
