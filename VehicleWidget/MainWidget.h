@@ -15,7 +15,7 @@ public:
 	~MainWidget();
 
 	//! Adds a temperature gauge to vehicle widget
-	void AddTemperatureGauge(int iS, int iX, int iY, int iR);
+	void AddTemperatureGauge(int iS);
 
 private:
 	//! Pointer to vehicle widget

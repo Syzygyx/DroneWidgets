@@ -13,7 +13,7 @@ MainWidget::MainWidget(QWidget *parent)
 	setFixedSize(1280, 700);
 
 	m_pVehicle = new VehicleWidget(this);
-	m_pVehicle->setGeometry(430, 10, 800, 600);
+	m_pVehicle->setGeometry(430, 10, 400, 600);
 	m_pVehicle->setStyleSheet("background-color: rgb(64, 64, 64);");
 
 	m_pSlider = new QSlider*[SLIDER_COUNT];
@@ -23,13 +23,13 @@ MainWidget::MainWidget(QWidget *parent)
 		m_pSlider[i]->setRange(0, 400);
 	}
 
-	AddTemperatureGauge(0, 225, 196, 120);
-	AddTemperatureGauge(1, 399, 97, 120);
-	AddTemperatureGauge(2, 573, 196, 120);
-	AddTemperatureGauge(3, 574, 397, 120);
-	AddTemperatureGauge(4, 398, 496, 120);
-	AddTemperatureGauge(5, 226, 396, 120);
-	AddTemperatureGauge(6, 400, 297, 200);
+	AddTemperatureGauge(0);
+	AddTemperatureGauge(1);
+	AddTemperatureGauge(2);
+	AddTemperatureGauge(3);
+	AddTemperatureGauge(4);
+	AddTemperatureGauge(5);
+	AddTemperatureGauge(6);
 }
 
 //-----------------------------------------------------------------------------
@@ -41,14 +41,13 @@ MainWidget::~MainWidget()
 
 //-----------------------------------------------------------------------------
 
-void MainWidget::AddTemperatureGauge(int iS, int iX, int iY, int iR)
+void MainWidget::AddTemperatureGauge(int iS)
 {
 	TemperatureGauge* pTG;
 	pTG = new TemperatureGauge(0, 400);
-	pTG->setFixedSize(iR, iR);
 	pTG->Init();
 	// manually adding gauges at correct position.
-	m_pVehicle->AddGauge(QPoint(iX, iY), pTG);
+	m_pVehicle->SetGauge(iS, pTG);
 
 	// make sure that change in slider is passed to the temperature gauge
 	connect(m_pSlider[iS], SIGNAL(valueChanged(int)), pTG, SLOT(SetTemperature(int)));
