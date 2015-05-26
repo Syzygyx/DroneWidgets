@@ -14,14 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         MainWidget.cpp \
+    TemperatureGauge.cpp \
     VehicleWidget.cpp \
-    ../Qt-custom-gauge-widget/source/qcgaugewidget.cpp \
-    TemperatureGauge.cpp
+    ../Qt-custom-gauge-widget/source/qcgaugewidget.cpp
 
 HEADERS  += MainWidget.h \
+    TemperatureGauge.h \
     VehicleWidget.h \
-    ../Qt-custom-gauge-widget/source/qcgaugewidget.h \
-    TemperatureGauge.h
+    ../Qt-custom-gauge-widget/source/qcgaugewidget.h
 
-RESOURCES += \
-    Files.qrc
+DISTFILES += \
+    ./files/Vehicle.svg
