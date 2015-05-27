@@ -131,7 +131,7 @@ include(QGCInstaller.pri)
 # Main QGroundControl portion of project file
 #
 
-RESOURCES += qgroundcontrol.qrc
+RESOURCES += qgroundcontrol.qrc resources/vehicle/Files.qrc
 
 DEPENDPATH += \
     . \
@@ -349,6 +349,9 @@ HEADERS += \
     src/ViewWidgets/ParameterEditorWidget.h \
     src/ViewWidgets/ViewWidgetController.h \
     src/Waypoint.h \
+    src/ui/vehicle/VehicleWidget.h \
+    src/ui/vehicle/TemperatureGauge.h \
+    src/ui/gauge/qcgaugewidget.h \
 
 !AndroidBuild {
 HEADERS += \
@@ -475,6 +478,9 @@ SOURCES += \
     src/ViewWidgets/ParameterEditorWidget.cc \
     src/ViewWidgets/ViewWidgetController.cc \
     src/Waypoint.cc \
+    src/ui/vehicle/VehicleWidget.cpp \
+    src/ui/vehicle/TemperatureGauge.cpp \
+    src/ui/gauge/qcgaugewidget.cpp \
 
 !AndroidBuild {
 SOURCES += \
